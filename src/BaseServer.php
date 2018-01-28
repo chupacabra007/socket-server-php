@@ -8,7 +8,7 @@ abstract class BaseServer
     protected $server_port;
     private $RequestHandlerClass;
     private $shutdown_request = false;
-    const SHUTDOWN_CODE = -1;
+    
         
     public function __construct($server_host, $server_port, $RequestHandlerClass)
     {
@@ -41,11 +41,12 @@ abstract class BaseServer
         }
     }
     
+    
     public function shutdown()
     {
-        $this->shutdown_request = true;
-        //TODO. threading stuff    
+        $this->shutdown_request = true; 
     }
+    
     
     public function handle_request()
     {
@@ -61,16 +62,19 @@ abstract class BaseServer
         }        
     }  
     
+    
     public function verify_request($request)
     {
         return true;    
     }
+    
     
     public function process_request($request)
     {
         $this->finish_request($request);
         $this->shutdown_request($request);
     }
+    
     
     public function finish_request($request)
     {
@@ -83,7 +87,9 @@ abstract class BaseServer
         $this->close_request($request);
     }
     
+    
     abstract public function close_request($request);
+    
     
     abstract public function server_close();
     
