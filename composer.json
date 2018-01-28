@@ -1,0 +1,21 @@
+{
+    "config": {
+        "vendor-dir": "src/vendor"  
+    },
+    "name": "chupacabra007/networking",
+    "description": "PHP implementation of sockets server",
+    "license": "MIT",
+    "keywords": ["chupacabra007","networking","sockets","server"],
+    "authors": [{
+        "name": "Volkov Viktor",
+        "email": "vv_volkov@mail.ru"
+    }],
+    "require-dev": {
+        "phpunit/phpunit": "6.0.*"
+    },
+    "autoload":{
+        "psr-4": {
+            "chupacabra007\\networking\\": "src"        
+        } 
+    }
+}
