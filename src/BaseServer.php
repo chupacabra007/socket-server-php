@@ -9,7 +9,6 @@ abstract class BaseServer
     private $RequestHandlerClass;
     private $shutdown_request = false;
     
-        
     public function __construct($server_host, $server_port, $RequestHandlerClass)
     {
         $this->server_host = $server_host;
@@ -17,16 +16,13 @@ abstract class BaseServer
         $this->RequestHandlerClass = $RequestHandlerClass;
     }
     
-    
     abstract public function server_activate();
-    
     
     public function serve_forever($poll_interval = 0.5)
     {
         $socket = $this->fileno();
         $clients = [$socket];
-        while(!$this->shutdown_request)
-        {
+        while(!$this->shutdown_request) {
             $read = $clients;
             $write = [];
             $except = [];
@@ -41,20 +37,18 @@ abstract class BaseServer
         }
     }
     
-    
     public function shutdown()
     {
         $this->shutdown_request = true; 
     }
     
-    
     public function handle_request()
     {
-        $request = $this->get_request();
+        $this->get_request($request, $client_ip, $client_port, $buf);
         
-        if ($this->verify_request($request))
+        if ($this->verify_request($request, $client_ip, $client_port, $buf))
         {
-            $this->process_request($request);        
+            $this->process_request($request, $client_ip, $client_port, $buf);        
         } 
         else 
         {
@@ -62,24 +56,21 @@ abstract class BaseServer
         }        
     }  
     
-    
-    public function verify_request($request)
+    public function verify_request($request, $client_ip, $client_port, $buf)
     {
         return true;    
     }
     
-    
-    public function process_request($request)
+    public function process_request($request, $client_ip, $client_port, $buf)
     {
-        $this->finish_request($request);
+        $this->finish_request($request, $client_ip, $client_port, $buf);
         $this->shutdown_request($request);
     }
     
-    
-    public function finish_request($request)
+    public function finish_request($request, $client_ip, $client_port, $buf)
     {
-        $HandlerClass = $this->RequestHandlerClass;
-        new $HandlerClass($request);
+        $HandlerClass = 'chupacabra007\\networking\\' . $this->RequestHandlerClass;
+        new $HandlerClass($request, $client_ip, $client_port, $buf);
     }
     
     public function shutdown_request($request)
@@ -87,38 +78,7 @@ abstract class BaseServer
         $this->close_request($request);
     }
     
-    
     abstract public function close_request($request);
     
-    
-    abstract public function server_close();
-    
+    abstract public function server_close();    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

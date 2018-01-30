@@ -2,12 +2,11 @@
 
 namespace chupacabra007\networking;
 
-
 class TcpServer extends BaseServer 
 {
     use ForkingMixIn;
         
-    private $socket;
+    protected $socket;
     private $socket_type = SOCK_STREAM;
     private $address_family = AF_INET;    
     private $request_queue_size = 5;
@@ -43,9 +42,9 @@ class TcpServer extends BaseServer
         socket_listen($this->socket, $this->request_queue_size);
     }
     
-    public function get_request()
+    public function get_request(&$request, &$client_ip, &$client_port, &$buf)
     {
-        return socket_accept($this->socket);    
+        $request = socket_accept($this->socket);    
     }
     
     public function shutdown_request($request)
